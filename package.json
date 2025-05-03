@@ -13,6 +13,7 @@
   "dependencies": {
     "@playwright/browser-chromium": "^1.52.0",
     "dotenv": "^16.5.0",
+    "play-sound": "^1.1.6",
     "playwright": "^1.52.0",
     "twilio": "^5.5.2"
   }

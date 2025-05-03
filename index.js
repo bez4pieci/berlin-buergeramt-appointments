@@ -1,6 +1,7 @@
 import 'dotenv/config';
 import checkAppointments from './src/check_appointments.js';
 import { clearLine, displayCountdown, sendSMS, isValidTwilioConfig } from './src/utils.js';
+import PlaySound from 'play-sound';
 
 const CHECK_INTERVAL = parseInt(process.env.CHECK_INTERVAL) || 120; // 2 minutes in seconds
 const SERVICE_URL = process.env.SERVICE_URL;
@@ -14,6 +15,8 @@ if (!isValidTwilioConfig()) {
     console.log('FYI: Twilio is not configured. You will not receive SMS notifications.');
 }
 
+const player = new PlaySound();
+
 async function loop() {
     process.stdout.write(`\rChecking for appointments...`);
 
@@ -23,18 +26,24 @@ async function loop() {
     } catch (error) {
         clearLine();
         console.log(`[${new Date().toLocaleString()}] \x1b[31m${error?.message || 'An unknown error occurred'}\x1b[0m`);
-
+        
         displayCountdown(CHECK_INTERVAL);
         setTimeout(loop, CHECK_INTERVAL * 1000);
         return;
     }
 
     clearLine();
-    console.log(`[${new Date().toLocaleString()}] \x1b[32mAppointments found!\x1b[0m`);
+    console.log(`[${new Date().toLocaleString()}] \x1b[32mAppointments found! Go to ${SERVICE_URL} and book your appointment!\x1b[0m`);
 
     if(isValidTwilioConfig()) {
         sendSMS(`Appointments found! ${SERVICE_URL}`);
     }
+
+    await new Promise(resolve => {
+        player.play('./media/heavenly-choir.aiff', () => {
+            resolve();
+        });
+    });
 }
 
 loop();
