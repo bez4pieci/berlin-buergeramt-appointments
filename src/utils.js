@@ -10,13 +10,14 @@ export function clearLine() {
 }
 
 export function displayCountdown(seconds) {
-    const interval = setInterval(() => {
-        process.stdout.write(`\rNext check in: ${seconds} seconds...`);
-        seconds--;
+    process.stdout.write(`\rNext check in: ${seconds} seconds...`);
 
-        if (seconds <= 0) {
+    const interval = setInterval(() => {
+        seconds--;
+        process.stdout.write(`\rNext check in: ${seconds} seconds...`);
+
+        if (seconds <= 1) {
             clearInterval(interval);
-            clearLine();
         }
     }, 1000);
 }
@@ -42,7 +43,7 @@ export async function sendTestSMS(message) {
         return;
     }
 
-    if(await sendSMS(message)) {
+    if (await sendSMS(message)) {
         console.log('SMS sent!');
     } else {
         console.error('Error sending SMS. Please check your Twilio configuration in .env file.');
