@@ -8,7 +8,7 @@ The application:
 1. Checks the specified Berlin.de service URL for available appointments
 2. If appointments are available, it:
    - Displays a message in the console and plays a sound
-   - Sends an SMS notification (if configured) with the link to the service, so you can quickly book the apartment even if you're not at your computer.
+   - Sends an SMS notification (if configured) with the link to the service, so you can quickly book the appointment even if you're not at your computer.
 3. If no appointments are available, it checks again after the specified intervalval
 
 ### Notes
