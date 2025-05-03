@@ -1,6 +1,6 @@
 # Berlin Bürgeramt Appointments
 
-This application automatically checks for available appointments on Berlin.de and sends SMS notifications when appointments are found.
+This command-line application automatically checks for available appointments on Berlin.de and sends SMS notifications when appointments are found.
 
 ## How It Works
 
@@ -13,7 +13,7 @@ The application:
 
 ### Notes
 
-- MacOS and Linux computers will not enter sleep mode while this script is running
+- MacOS and Linux computers will not enter sleep mode while the application is running
 
 ## Prerequisites
 
@@ -70,7 +70,7 @@ Start the application:
 npm start
 ```
 
-## Room for improvements
+## Room for improvements
 
 - Refactor to use [terminal-kit](https://www.npmjs.com/package/terminal-kit) instead of `chalk`
 
