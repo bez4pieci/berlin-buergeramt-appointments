@@ -70,6 +70,10 @@ Start the application:
 npm start
 ```
 
+## Room for improvements
+
+- Refactor to use [terminal-kit](https://www.npmjs.com/package/terminal-kit) instead of `chalk`
+
 ## License
 
 This project is licensed under the [MIT License](https://opensource.org/license/mit).

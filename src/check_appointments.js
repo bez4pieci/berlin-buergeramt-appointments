@@ -1,3 +1,5 @@
+import boxen from 'boxen';
+import chalk from 'chalk';
 import { chromium } from 'playwright';
 
 /**
@@ -5,7 +7,7 @@ import { chromium } from 'playwright';
  * @returns {Promise<boolean>}
  * @throws {Error}
  */
-export default async function checkAppointments(serviceURL) {
+export async function checkAppointments(serviceURL) {
     const browser = await chromium.launch();
     const page = await browser.newPage();
 
@@ -25,6 +27,33 @@ export default async function checkAppointments(serviceURL) {
             return true;
         }
 
+    } catch (error) {
+        throw error;
+
+    } finally {
+        await browser.close();
+    }
+}
+
+/**
+ * @param {string} serviceURL
+ * @throws {Error}
+ */
+export async function logServiceInfo(serviceURL) {
+    const browser = await chromium.launch();
+    const page = await browser.newPage();
+
+    try {
+        await page.goto(serviceURL);
+        const title = await page.textContent('h1.title');
+        console.log(boxen(chalk.bold.cyanBright(title), {
+            title: 'Appointments for',
+            titleAlignment: 'center',
+            padding: 1,
+            margin: 1,
+            borderStyle: 'double',
+            borderColor: 'cyan'
+        }));
     } catch (error) {
         throw error;
 

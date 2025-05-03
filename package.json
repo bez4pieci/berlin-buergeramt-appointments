@@ -12,6 +12,7 @@
   "description": "Check for Berlin.de appointments and send an SMS notification if appointments are found",
   "dependencies": {
     "@playwright/browser-chromium": "^1.52.0",
+    "boxen": "^8.0.1",
     "chalk": "^5.4.1",
     "dotenv": "^16.5.0",
     "play-sound": "^1.1.6",

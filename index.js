@@ -3,7 +3,7 @@ import 'dotenv/config';
 import Play from 'play-sound';
 import readlineSync from 'readline-sync';
 import terminalLink from 'terminal-link';
-import checkAppointments from './src/check_appointments.js';
+import { checkAppointments, logServiceInfo } from './src/check_appointments.js';
 import { sendSMS } from './src/sms.js';
 import { clearLine, isValidTwilioConfig, preventSleep, timeoutWithCountdown } from './src/utils.js';
 
@@ -14,6 +14,8 @@ if (!SERVICE_URL) {
     console.error(chalk.red('Required environment variable SERVICE_URL is missing. Please check your .env file.'));
     process.exit(1);
 }
+
+await logServiceInfo(SERVICE_URL);
 
 if (!isValidTwilioConfig()) {
     console.log(chalk.yellow('FYI: Twilio is not configured. You will not receive SMS notifications.'));
