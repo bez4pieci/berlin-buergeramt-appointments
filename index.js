@@ -2,8 +2,9 @@ import chalk from 'chalk';
 import 'dotenv/config';
 import Play from 'play-sound';
 import readlineSync from 'readline-sync';
-import { sendSMS } from 'src/sms.js';
+import terminalLink from 'terminal-link';
 import checkAppointments from './src/check_appointments.js';
+import { sendSMS } from './src/sms.js';
 import { clearLine, isValidTwilioConfig, preventSleep, timeoutWithCountdown } from './src/utils.js';
 
 const CHECK_INTERVAL = parseInt(process.env.CHECK_INTERVAL ?? '120', 10); // 2 minutes in seconds
@@ -38,7 +39,7 @@ async function loop() {
     }
 
     clearLine();
-    console.log(`[${new Date().toLocaleString()}] ${chalk.greenBright(`Appointments found! Go to ${SERVICE_URL} and book your appointment!`)}`);
+    console.log(`[${new Date().toLocaleString()}] ${chalk.greenBright(`Appointments found! Go to ${terminalLink(SERVICE_URL, SERVICE_URL)} and book your appointment!`)}`);
 
     if (isValidTwilioConfig()) {
         sendSMS(`Appointments found! ${SERVICE_URL}`);

@@ -2,11 +2,6 @@
 
 This application automatically checks for available appointments on Berlin.de and sends SMS notifications when appointments are found.
 
-## TODO
-
-- Open default browser with the service URL, when appointment has been found
-- Ability to *remotely* resume checking for appointments (?)
-
 ## How It Works
 
 The application:
