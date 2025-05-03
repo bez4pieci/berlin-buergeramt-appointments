@@ -2,7 +2,7 @@
 
 This application automatically checks for available appointments on Berlin.de and sends SMS notifications when appointments are found.
 
-## TODO
+## TODO
 
 - Prevent computer from going asleep while checking for appointments
 - Ability to resume search (also remotely?), if appointmet booking still failed, even after an appointment was found
