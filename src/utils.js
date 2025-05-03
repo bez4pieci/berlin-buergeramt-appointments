@@ -11,9 +11,20 @@ export function clearLine() {
     process.stdout.write('\r' + ' '.repeat(90) + '\r');
 }
 
+/**
+ * @param {{ (): Promise<void>; (): void; }} callback
+ * @param {number} durationInSeconds
+ */
 export async function timeoutWithCountdown(callback, durationInSeconds) {
     const thenInSeconds = Math.floor(Date.now() / 1000) + durationInSeconds;
-    let resolve, interval;
+    /**
+     * @type {(value?: any) => void}
+     */
+    let resolve;
+    /**
+     * @type {string | number | NodeJS.Timeout | undefined}
+     */
+    let interval;
 
     setTimeout(() => {
         clearInterval(interval);

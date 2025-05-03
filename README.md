@@ -4,8 +4,8 @@ This application automatically checks for available appointments on Berlin.de an
 
 ## TODO
 
-- Ability to resume search (also remotely?), if appointmet booking still failed, even after an appointment was found
 - Open default browser with the service URL, when appointment has been found
+- Ability to *remotely* resume checking for appointments (?)
 
 ## How It Works
 

@@ -1,5 +1,10 @@
 import { chromium } from 'playwright';
 
+/**
+ * @param {string} serviceURL
+ * @returns {Promise<boolean>}
+ * @throws {Error}
+ */
 export default async function checkAppointments(serviceURL) {
     const browser = await chromium.launch();
     const page = await browser.newPage();
@@ -10,6 +15,10 @@ export default async function checkAppointments(serviceURL) {
         await page.waitForLoadState('networkidle');
 
         const pageText = await page.textContent('body');
+        if (!pageText) {
+            throw new Error('Could not get page content!');
+        }
+
         if (pageText.includes('Leider sind aktuell keine Termine für ihre Auswahl verfügbar')) {
             throw new Error('No appointments available.');
         } else {
