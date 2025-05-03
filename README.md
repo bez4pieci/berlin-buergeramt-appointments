@@ -4,7 +4,6 @@ This application automatically checks for available appointments on Berlin.de an
 
 ## TODO
 
-- Prevent computer from going asleep while checking for appointments
 - Ability to resume search (also remotely?), if appointmet booking still failed, even after an appointment was found
 - Open default browser with the service URL, when appointment has been found
 
@@ -16,6 +15,10 @@ The application:
    - Displays a message in the console and plays a sound
    - Sends an SMS notification (if configured) with the link to the service, so you can quickly book the apartment even if you're not at your computer.
 3. If no appointments are available, it checks again after the specified intervalval
+
+### Notes
+
+- MacOS and Linux computers will not enter sleep mode while this script is running
 
 ## Prerequisites
 

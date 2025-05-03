@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "testsms": "node -e \"require('./src/utils').sendTestSMS('Test message')\""
+    "testsms": "node -e \"require('./src/sms').sendTestSMS('Test message')\""
   },
   "author": "Ernests Karlsons",
   "license": "MIT",

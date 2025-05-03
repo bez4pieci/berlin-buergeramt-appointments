@@ -1,5 +1,6 @@
+import { spawn } from 'child_process';
 import 'dotenv/config';
-import Twilio from 'twilio';
+import process from 'process';
 
 export function isValidTwilioConfig() {
     return process.env.TWILIO_ACCOUNT_SID && process.env.TWILIO_AUTH_TOKEN && process.env.TWILIO_FROM_PHONE_NUMBER && process.env.TWILIO_TO_PHONE_NUMBER;
@@ -22,30 +23,35 @@ export function displayCountdown(seconds) {
     }, 1000);
 }
 
-export async function sendSMS(message) {
-    const client = new Twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
-    try {
-        const result = await client.messages.create({
-            body: message,
-            from: process.env.TWILIO_FROM_PHONE_NUMBER,
-            to: process.env.TWILIO_TO_PHONE_NUMBER
-        });
-        return result;
-    } catch (error) {
-        console.error(error);
-        return false;
-    }
-}
+export function preventSleep() {
+    switch (process.platform) {
+        case 'darwin':
+            console.log('Entering sleep prevention mode...');
+            const caffeinate = spawn('caffeinate', ['-i', `-w ${process.pid}`]);
 
-export async function sendTestSMS(message) {
-    if (!isValidTwilioConfig()) {
-        console.error('Twilio is not configured. Please check your .env file.');
-        return;
-    }
+            process.on('exit', () => {
+                console.log('\rExiting sleep prevention mode...');
+                caffeinate.kill();
+            });
+            break;
 
-    if (await sendSMS(message)) {
-        console.log('SMS sent!');
-    } else {
-        console.error('Error sending SMS. Please check your Twilio configuration in .env file.');
+        case 'linux':
+            console.log('Entering sleep prevention mode...');
+            const inhibit = spawn('systemd-inhibit', [
+                '--what=sleep',
+                '--who=berlin-buergeramt-appointments',
+                '--why=Checking for available appointments in Berlin.de',
+                '--mode=block',
+                'sleep', 'infinity'
+            ]);
+
+            process.on('exit', () => {
+                console.log('\rExiting sleep prevention mode...');
+                inhibit.kill();
+            });
+            break;
+
+        default:
+            console.log('FYI: Sleep prevention is only supported on macOS and Linux. Make sure your computer does not sleep while this script is running.');
     }
 }
