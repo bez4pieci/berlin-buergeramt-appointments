@@ -70,6 +70,11 @@ Start the application:
 npm start
 ```
 
+Start the application by overriding a avariable set in `.env`:
+```bash
+SERVICE_URL=https://service.berlin.de/dienstleistung/330112/ npm start
+```
+
 ## Room for improvements
 
 - Refactor to use [terminal-kit](https://www.npmjs.com/package/terminal-kit) instead of `chalk`
