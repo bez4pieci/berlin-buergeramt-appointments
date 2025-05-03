@@ -1,3 +1,4 @@
+import chalk from 'chalk';
 import 'dotenv/config';
 import PlaySound from 'play-sound';
 import checkAppointments from './src/check_appointments.js';
@@ -9,12 +10,12 @@ const CHECK_INTERVAL = parseInt(process.env.CHECK_INTERVAL) || 120; // 2 minutes
 const SERVICE_URL = process.env.SERVICE_URL;
 
 if (!SERVICE_URL) {
-    console.error('Required environment variable SERVICE_URL is missing. Please check your .env file.');
+    console.error(chalk.red('Required environment variable SERVICE_URL is missing. Please check your .env file.'));
     process.exit(1);
 }
 
 if (!isValidTwilioConfig()) {
-    console.log('FYI: Twilio is not configured. You will not receive SMS notifications.');
+    console.log(chalk.yellow('FYI: Twilio is not configured. You will not receive SMS notifications.'));
 }
 
 preventSleep();
@@ -29,14 +30,14 @@ async function loop() {
 
     } catch (error) {
         clearLine();
-        console.log(`[${new Date().toLocaleString()}] \x1b[31m${error?.message || 'An unknown error occurred'}\x1b[0m`);
+        console.log(`[${new Date().toLocaleString()}] ${chalk.red(error?.message || 'An unknown error occurred')}`);
 
         timeoutWithCountdown(loop, CHECK_INTERVAL);
         return;
     }
 
     clearLine();
-    console.log(`[${new Date().toLocaleString()}] \x1b[32mAppointments found! Go to ${SERVICE_URL} and book your appointment!\x1b[0m`);
+    console.log(`[${new Date().toLocaleString()}] ${chalk.greenBright(`Appointments found! Go to ${SERVICE_URL} and book your appointment!`)}`);
 
     if (isValidTwilioConfig()) {
         sendSMS(`Appointments found! ${SERVICE_URL}`);

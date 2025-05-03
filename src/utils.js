@@ -1,3 +1,4 @@
+import chalk from 'chalk';
 import { spawn } from 'child_process';
 import 'dotenv/config';
 import process from 'process';
@@ -7,38 +8,44 @@ export function isValidTwilioConfig() {
 }
 
 export function clearLine() {
-    process.stdout.write('\r' + ' '.repeat(30) + '\r');
+    process.stdout.write('\r' + ' '.repeat(90) + '\r');
 }
 
-export function timeoutWithCountdown(callback, seconds) {
-    process.stdout.write(`\rNext check in: ${seconds} seconds...`);
+export async function timeoutWithCountdown(callback, durationInSeconds) {
+    const thenInSeconds = Math.floor(Date.now() / 1000) + durationInSeconds;
+    let resolve, interval;
 
-    const interval = setInterval(() => {
-        seconds--;
-        process.stdout.write(`\rNext check in: ${seconds} seconds...`);
+    setTimeout(() => {
+        clearInterval(interval);
+        resolve();
+    }, durationInSeconds * 1000);
 
-        if (seconds <= 0) {
-            clearInterval(interval);
-            clearLine();
-            callback();
-        }
-    }, 1000);
+    interval = setInterval(() => {
+        process.stdout.write(`\r[${new Date().toLocaleString()}] Next check in: ${chalk.whiteBright(thenInSeconds - Math.floor(Date.now() / 1000))} seconds...`);
+    }, 100);
+
+    await new Promise(res => {
+        resolve = res;
+    });
+
+    clearLine();
+    callback();
 }
 
 export function preventSleep() {
     switch (process.platform) {
         case 'darwin':
-            console.log('Entering sleep prevention mode...');
+            console.log(chalk.grey('Entering sleep prevention mode...'));
             const caffeinate = spawn('caffeinate', ['-i', `-w ${process.pid}`]);
 
             process.on('exit', () => {
-                console.log('\rExiting sleep prevention mode...');
+                console.log(chalk.grey('\rExiting sleep prevention mode...'));
                 caffeinate.kill();
             });
             break;
 
         case 'linux':
-            console.log('Entering sleep prevention mode...');
+            console.log(chalk.grey('Entering sleep prevention mode...'));
             const inhibit = spawn('systemd-inhibit', [
                 '--what=sleep',
                 '--who=berlin-buergeramt-appointments',
@@ -48,12 +55,12 @@ export function preventSleep() {
             ]);
 
             process.on('exit', () => {
-                console.log('\rExiting sleep prevention mode...');
+                console.log(chalk.grey('\rExiting sleep prevention mode...'));
                 inhibit.kill();
             });
             break;
 
         default:
-            console.log('FYI: Sleep prevention is only supported on macOS and Linux. Make sure your computer does not sleep while this script is running.');
+            console.log(chalk.yellow('FYI: Sleep prevention is only supported on macOS and Linux. Make sure your computer does not sleep while this script is running.'));
     }
 }
