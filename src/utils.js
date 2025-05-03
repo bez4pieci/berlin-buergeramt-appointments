@@ -10,15 +10,17 @@ export function clearLine() {
     process.stdout.write('\r' + ' '.repeat(30) + '\r');
 }
 
-export function displayCountdown(seconds) {
+export function timeoutWithCountdown(callback, seconds) {
     process.stdout.write(`\rNext check in: ${seconds} seconds...`);
 
     const interval = setInterval(() => {
         seconds--;
         process.stdout.write(`\rNext check in: ${seconds} seconds...`);
 
-        if (seconds <= 1) {
+        if (seconds <= 0) {
             clearInterval(interval);
+            clearLine();
+            callback();
         }
     }, 1000);
 }
