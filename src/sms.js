@@ -1,6 +1,11 @@
 import Twilio from 'twilio';
+import { isValidTwilioConfig } from './utils.js';
 
+/**
+ * @param {string} message
+ */
 export async function sendSMS(message) {
+    // @ts-ignore
     const client = new Twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
     try {
         const result = await client.messages.create({
@@ -15,6 +20,9 @@ export async function sendSMS(message) {
     }
 }
 
+/**
+ * @param {string} message
+ */
 export async function sendTestSMS(message) {
     if (!isValidTwilioConfig()) {
         console.error('Twilio is not configured. Please check your .env file.');
