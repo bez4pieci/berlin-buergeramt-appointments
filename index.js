@@ -2,7 +2,8 @@ import chalk from 'chalk';
 import 'dotenv/config';
 import { logServiceInfo } from './src/check_appointments.js';
 import main from './src/main.js';
-import { isValidTwilioConfig, preventSleep } from './src/utils.js';
+import { isTwilioConfigValid } from './src/sms.js';
+import { preventSleep } from './src/utils.js';
 
 const MIN_CHECK_INTERVAL = 120;
 const CHECK_INTERVAL = parseInt(process.env.CHECK_INTERVAL ?? String(MIN_CHECK_INTERVAL), 10); // 2 minutes in seconds
@@ -20,7 +21,7 @@ if (CHECK_INTERVAL < MIN_CHECK_INTERVAL) {
 
 await logServiceInfo(SERVICE_URL);
 
-if (!isValidTwilioConfig()) {
+if (!isTwilioConfigValid()) {
     console.log(chalk.yellow('FYI: Twilio is not configured. You will not receive SMS notifications.'));
 }
 
