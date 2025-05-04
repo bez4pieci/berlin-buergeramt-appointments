@@ -1,5 +1,3 @@
-import boxen from 'boxen';
-import chalk from 'chalk';
 import { chromium } from 'playwright';
 
 /**
@@ -37,23 +35,16 @@ export async function checkAppointments(serviceURL) {
 
 /**
  * @param {string} serviceURL
+ * @returns {Promise<string|null>}
  * @throws {Error}
  */
-export async function logServiceInfo(serviceURL) {
+export async function getServiceTitle(serviceURL) {
     const browser = await chromium.launch();
     const page = await browser.newPage();
 
     try {
         await page.goto(serviceURL);
-        const title = await page.textContent('h1.title');
-        console.log(boxen(chalk.bold.cyanBright(title), {
-            title: 'Appointments for',
-            titleAlignment: 'center',
-            padding: 1,
-            margin: 1,
-            borderStyle: 'double',
-            borderColor: 'cyan'
-        }));
+        return await page.textContent('h1.title');
     } catch (error) {
         throw error;
 

@@ -1,6 +1,7 @@
+import boxen from 'boxen';
 import chalk from 'chalk';
 import 'dotenv/config';
-import { logServiceInfo } from './src/check_appointments.js';
+import { getServiceTitle } from './src/check_appointments.js';
 import main from './src/main.js';
 import { isTwilioConfigValid } from './src/sms.js';
 import { preventSleep } from './src/utils.js';
@@ -19,7 +20,15 @@ if (CHECK_INTERVAL < MIN_CHECK_INTERVAL) {
     process.exit(1);
 }
 
-await logServiceInfo(SERVICE_URL);
+const serviceTitle = await getServiceTitle(SERVICE_URL);
+console.log(boxen(chalk.bold.cyanBright(serviceTitle), {
+    title: 'Appointments for',
+    titleAlignment: 'center',
+    padding: 1,
+    margin: 1,
+    borderStyle: 'double',
+    borderColor: 'cyan'
+}));
 
 if (!isTwilioConfigValid()) {
     console.log(chalk.yellow('FYI: Twilio is not configured. You will not receive SMS notifications.'));
