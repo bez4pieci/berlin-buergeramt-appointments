@@ -1,13 +1,9 @@
 import chalk from "chalk";
-import Play from "play-sound";
 import readlineSync from "readline-sync";
 import terminalLink from "terminal-link";
 import { checkAppointments } from "./check_appointments.js";
 import { sendSMS } from "./sms.js";
-import { clearLine, isValidTwilioConfig, timeoutWithCountdown } from "./utils.js";
-
-// @ts-ignore
-const player = new Play();
+import { clearLine, playHappyNotificationSound, timeoutWithCountdown } from "./utils.js";
 
 /**
  * @param {string} serviceURL
@@ -30,16 +26,15 @@ export default async function main(serviceURL, checkInterval) {
     clearLine();
     console.log(`[${new Date().toLocaleString()}] ${chalk.greenBright(`Appointments found! Go to ${terminalLink(serviceURL, serviceURL)} and book your appointment!`)}`);
 
-    if (isValidTwilioConfig()) {
-        sendSMS(`Appointments found! ${serviceURL}`);
-    }
-
-    player.play('./media/heavenly-choir.aiff');
+    await Promise.allSettled([
+        sendSMS(`Appointments found! ${serviceURL}`),
+        playHappyNotificationSound()
+    ]);
 
     if (readlineSync.keyInYNStrict('Do you want to continue looking for appointments?')) {
         main(serviceURL, checkInterval);
     } else {
-        // Need explicit exit to trigger removal of sleep prevention
+        // Need explicit exit because the sleep prevention will not allow the script to exit automatically
         process.exit(0);
     }
 }

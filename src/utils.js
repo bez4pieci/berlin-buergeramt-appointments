@@ -1,14 +1,22 @@
 import chalk from 'chalk';
 import { spawn } from 'child_process';
 import 'dotenv/config';
+import Play from 'play-sound';
 import process from 'process';
-
-export function isValidTwilioConfig() {
-    return process.env.TWILIO_ACCOUNT_SID && process.env.TWILIO_AUTH_TOKEN && process.env.TWILIO_FROM_PHONE_NUMBER && process.env.TWILIO_TO_PHONE_NUMBER;
-}
 
 export function clearLine() {
     process.stdout.write('\r' + ' '.repeat(90) + '\r');
+}
+
+export async function playHappyNotificationSound() {
+    // @ts-ignore
+    const player = new Play();
+
+    await new Promise(resolve => {
+        player.play('./media/heavenly-choir.aiff', () => {
+            resolve(true);
+        });
+    });
 }
 
 /**
