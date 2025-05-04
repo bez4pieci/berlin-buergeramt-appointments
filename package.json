@@ -1,8 +1,10 @@
 {
   "name": "berlin-buergeramt-appointments",
-  "type": "module",
   "version": "0.0.1",
-  "main": "index.js",
+  "type": "module",
+  "engines": {
+    "node": ">=22.0.0"
+  },
   "scripts": {
     "start": "node index.js",
     "testsms": "node -e \"require('./src/sms').sendTestSMS('Test message')\""

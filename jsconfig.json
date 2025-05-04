@@ -1,9 +1,9 @@
 {
     "compilerOptions": {
-        "target": "ES2022",
+        "target": "ESNext",
         "module": "ESNext",
         "moduleResolution": "node",
-        "baseUrl": ".",
+        "baseUrl": "./",
         "paths": {
             "*": [
                 "*"
@@ -21,6 +21,5 @@
     ],
     "exclude": [
         "node_modules",
-        "dist"
     ]
 }
