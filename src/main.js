@@ -13,7 +13,10 @@ export default async function main(serviceURL, checkInterval) {
     process.stdout.write(`\r[${new Date().toLocaleString()}] Checking for appointments...`);
 
     try {
-        await checkAppointments(serviceURL);
+        const dates = await checkAppointments(serviceURL);
+
+        clearLine();
+        console.log(`[${new Date().toLocaleString()}] ${chalk.greenBright(`Appointments found: ${dates.join(', ')}. Go to ${terminalLink(serviceURL, serviceURL)} and book your appointment!`)}`);
 
     } catch (error) {
         clearLine();
@@ -22,9 +25,6 @@ export default async function main(serviceURL, checkInterval) {
         timeoutWithCountdown(() => main(serviceURL, checkInterval), checkInterval);
         return;
     }
-
-    clearLine();
-    console.log(`[${new Date().toLocaleString()}] ${chalk.greenBright(`Appointments found! Go to ${terminalLink(serviceURL, serviceURL)} and book your appointment!`)}`);
 
     await Promise.allSettled([
         sendSMS(`Appointments found! ${serviceURL}`),

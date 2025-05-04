@@ -2,7 +2,7 @@ import { chromium } from 'playwright';
 
 /**
  * @param {string} serviceURL
- * @returns {Promise<boolean>}
+ * @returns {Promise<string[]>}
  * @throws {Error}
  */
 export async function checkAppointments(serviceURL) {
@@ -14,16 +14,21 @@ export async function checkAppointments(serviceURL) {
         await page.click('text=Berlinweite Terminbuchung');
         await page.waitForLoadState('networkidle');
 
-        const pageText = await page.textContent('body');
-        if (!pageText) {
-            throw new Error('Could not get page content!');
+        const appointmentsTitle = await page.textContent('h1.title');
+        if (appointmentsTitle && !appointmentsTitle.trim().startsWith('Terminvereinbarung')) {
+            throw new Error(`No appointments available: ${appointmentsTitle}`);
         }
 
-        if (pageText.includes('Leider sind aktuell keine Termine für ihre Auswahl verfügbar')) {
-            throw new Error('No appointments available.');
-        } else {
-            return true;
+        const dates = await page.locator('td.buchbar a').evaluateAll((elements) =>
+            elements.map(element => element.getAttribute('title')?.substring(0, 10) ?? '')
+                .filter(date => !!date)
+        );
+
+        if (dates.length === 0) {
+            throw new Error('No dates available.');
         }
+
+        return dates;
 
     } catch (error) {
         throw error;
