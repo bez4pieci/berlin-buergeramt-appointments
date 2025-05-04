@@ -64,9 +64,26 @@ For receiving an SMS message when there are avaialble appointments, you'll need 
 
 - `CHECK_INTERVAL`: Time between checks in seconds (default and minimum: 120 seconds)
 
+## Usage
+
+Start the application:
+```bash
+npm start
+```
+
+Start the application by overriding a variable set in `.env`:
+```bash
+SERVICE_URL=https://service.berlin.de/dienstleistung/330112/ npm start
+```
+
+Test SMS functionality to see if you have configured everything correctly (you don't want to miss that SMS when appointments become available):
+```bash
+npm run testsms
+```
+
 ## Room for improvements
 
-- Refactor to use [terminal-kit](https://www.npmjs.com/package/terminal-kit) instead of `chalk`
+- Possibly refactor to use [terminal-kit](https://www.npmjs.com/package/terminal-kit) instead of [chalk](https://www.npmjs.com/package/chalk) and [readline-sync](https://www.npmjs.com/package/readline-sync)
 
 ## License
 
